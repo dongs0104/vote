@@ -2,9 +2,16 @@ extends layout
 
 block content
   h1= title
+
+
   form(action='/solution', method='post')
-    div.input
-      span.label 제목
+
+      span.label 분야
+      select(name = solutionType)
+        each type, i in types
+          option(value = i+1) #{type}
+      div.input
+        span.label 제목
         input(type="text", name="title")
       div.input
         span.label 내용
@@ -17,4 +24,8 @@ block content
         textarea(type =text, name="_creator", cols="40")
       div.actions
         input(type="submit", value="add")
-    h1 문재인 =
+    h5 문재인 = 59065e890d9dbd030ba98277
+    h5 홍준표 = 59065e930d9dbd030ba98278
+    h5 안철수 = 59065e970d9dbd030ba98279
+    h5 유승민 = 59065e9b0d9dbd030ba9827a
+    h5 심상정 = 59065e9e0d9dbd030ba9827b

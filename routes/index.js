@@ -2,7 +2,7 @@ var candidate = require("../controllers/candidate");
 var solution = require("../controllers/solution");
 module.exports = function(app) {
     app.get('/', function (req, res) {
-        res.render('index');
+        res.render('index', {"types" : ['노동, 여성', '보건, 복지', '재정, 경제', '환경, 문화, 관광', '국방, 통일외교통상', '교육, 과학기술, 정보통신', '농림해양수산, 산업자원, 건설교통', '정치, 행정자치, 사법윤리']});
     });
     /**
      *  User CRUD Routes
