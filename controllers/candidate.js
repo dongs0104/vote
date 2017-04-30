@@ -28,9 +28,9 @@ var Candidate = require("mongoose").model("Candidate");
  *  임시로 사용할 내용
  */
 exports.create = function(req, res, next) {
-    var Candidate = new Candidate(req.body);
+    var candidate = new Candidate(req.body);
     var r = new Object();
-    Candidate.save(function(err) {
+    candidate.save(function(err) {
         console.log(err);
         if(err) {
             r["result"] = 1;
