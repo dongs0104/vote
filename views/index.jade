@@ -2,4 +2,19 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  form(action='/solution', method='post')
+    div.input
+      span.label 제목
+        input(type="text", name="title")
+      div.input
+        span.label 내용
+        textarea(name="content", cols="40", rows="5")
+      div.input
+        span.label 참조한 곳
+        textarea(name="reference", cols="40")
+      div.input
+        span.label 후보자 명
+        textarea(type =text, name="_creator", cols="40")
+      div.actions
+        input(type="submit", value="add")
+    h1 문재인 =

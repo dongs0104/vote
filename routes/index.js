@@ -1,7 +1,9 @@
-var Candidate = require("../controllers/Candidate");
+var Candidate = require("../controllers/candidate");
 var solution = require("../controllers/solution");
 module.exports = function(app) {
-
+    app.get('/', function (req, res) {
+        res.render('index');
+    });
     /**
      *  User CRUD Routes
      */
