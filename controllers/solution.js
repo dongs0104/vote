@@ -31,7 +31,6 @@ var ObjectId = require("mongoose").Types.ObjectId;
 exports.create = function(req, res, next) {
     var solution = new Solution(req.body);
     var r = new Object();
-    console.log(req.body);
     solution.save(function(err) {
         if(err) {
             r["result"] = 1;
@@ -40,12 +39,12 @@ exports.create = function(req, res, next) {
         } else {
             r["result"] = 0;
             Candidate.findByIdAndUpdate(
-                new require("mongoose").Types.ObjectId(req.body._creator),
+                ObjectId(req.body._creator),
                 {$push: {solutions : solution._id}},
                 {safe: true, upsert: true, new : true},
                 function(){}
             );
-            res.status(200).json(r);
+            res.status(200).json(r).redirect('/');
         }
     });
 };
@@ -75,23 +74,29 @@ exports.create = function(req, res, next) {
 exports.search = function(req, res, next) {
     var r = new Object();
 
-    Solution.find({solutionType:req.params._type}, function(err, solutions) {
-        if(err) {
-            r["result"] = 1;
-            res.status(400).json(r);
-            return next(err);
-        } else {
-            if(solutions != null) {
-                r["result"] = 0;
-                r["solutions"] = solutions;
-                res.status(200).json(r);
-            } else {
+    var query = [{ $match: {solutionType : parseInt(req.params._type)}}, { $sample: {size: 5}}];
+    Solution.aggregate(query,
+        function(err,solutions) {
+            if(err) {
                 r["result"] = 1;
-                res.status(404).json(r);
+                res.status(400).json(r);
+                return next(err);
+            } else {
+                if(solutions != null) {
+                    r["result"] = 0;
+                    r["solutions"] = solutions;
+                    res.status(200).json(r);
+                } else {
+                    r["result"] = 1;
+                    res.status(404).json(r);
+                }
             }
         }
-    });
+    );
 };
+
+
+
 exports.readAll = function(req, res, next) {
     var r = new Object();
 
@@ -119,8 +124,15 @@ exports.delete = function(req, res, next) {
             return next(err);
         } else {
             if(solutions != null) {
+                console.log(solutions);
+                Candidate.findByIdAndUpdate(
+                    ObjectId(solutions._creator),
+                    {$pop: {solutions : solutions._id}},
+                    {safe: true, upsert: true, new : true},
+                    function(){});
                 r["result"] = 0;
-                res.status(200).json(r);
+
+                res.status(200).json(solutions);
             }
         }
     });

@@ -9,7 +9,7 @@ module.exports = function(app) {
      */
     app.route("/candidate").post(candidate.create);//임시
     app.route("/candidate/update/:_name").put(candidate.update);//후보자 투표율 증가
-
+    app.route("/candidates").get(candidate.readAll);//후보자 투표율 증가
     app.route("/solution").post(solution.create);//임시 투표 검증 데이터
     app.route("/solution/:_type").get(solution.search);//투표자 랜덤 데이터 Via type
     app.route("/solutions").get(solution.readAll);//투표 데이터

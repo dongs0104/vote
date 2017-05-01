@@ -31,7 +31,6 @@ exports.create = function(req, res, next) {
     var candidate = new Candidate(req.body);
     var r = new Object();
     candidate.save(function(err) {
-        console.log(err);
         if(err) {
             r["result"] = 1;
             res.status(400).json(r);
@@ -122,6 +121,24 @@ exports.update = function(req, res, next) {
                 r["result"] = 0;
                 r["user"] = u;
                 res.status(200).json(r);
+            } else {
+                r["result"] = 1;
+                res.status(404).json(r);
+            }
+        }
+    });
+};
+exports.readAll = function(req, res, next) {
+    var r = new Object();
+
+    Candidate.find({}, function(err, candidate) {
+        if(err) {
+            r["result"] = 1;
+            res.status(400).json(r);
+            return next(err);
+        } else {
+            if(candidate != null) {
+                res.status(200).json(candidate);
             } else {
                 r["result"] = 1;
                 res.status(404).json(r);

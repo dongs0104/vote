@@ -5,9 +5,7 @@ var mongoose = require("mongoose");
 
 module.exports = function() {
     var db = mongoose.connect("mongodb://csets.xyz/vote");
-
     require('../models/solutions.js');
     require('../models/candidate.js');
-
     return db;
 }
