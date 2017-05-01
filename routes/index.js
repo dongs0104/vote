@@ -16,4 +16,5 @@ module.exports = function(app) {
     /**
      * 	Other User Method Routes
      */
+    app.route("/solution").delete(solution.delete);//투표 데이터
 };

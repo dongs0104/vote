@@ -4,7 +4,7 @@ block content
   h1= title
   div.container
       form(action='/solution', method='post')
-          div.input
+          div.form-group
             label(for="solutionType") 분야
             select(name = "solutionType",.form-control)
                 each type, i in types

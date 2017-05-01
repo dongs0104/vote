@@ -1,6 +1,6 @@
 var Solution = require("mongoose").model("Solution");
 var Candidate = require("mongoose").model("Candidate");
-
+var ObjectId = require("mongoose").Types.ObjectId;
 /**
  * 	User CRUD Function
  */
@@ -82,7 +82,6 @@ exports.search = function(req, res, next) {
             return next(err);
         } else {
             if(solutions != null) {
-
                 r["result"] = 0;
                 r["solutions"] = solutions;
                 res.status(200).json(r);
@@ -106,6 +105,22 @@ exports.readAll = function(req, res, next) {
                 res.status(200).json(solutions);
             } else {
                 res.status(404).json(r);
+            }
+        }
+    });
+};
+
+exports.delete = function(req, res, next) {
+    var r = new Object();
+    Solution.findByIdAndRemove({_id:ObjectId(req.body._id)}, function(err, solutions) {
+        if(err) {
+            r["result"] = 1;
+            res.status(400).json(r);
+            return next(err);
+        } else {
+            if(solutions != null) {
+                r["result"] = 0;
+                res.status(200).json(r);
             }
         }
     });
