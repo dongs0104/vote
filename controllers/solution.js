@@ -39,14 +39,12 @@ exports.create = function(req, res, next) {
             return next(err);
         } else {
             r["result"] = 0;
-            var c = Candidate.findByIdAndUpdate(
+            Candidate.findByIdAndUpdate(
                 new require("mongoose").Types.ObjectId(req.body._creator),
                 {$push: {solutions : solution._id}},
                 {safe: true, upsert: true, new : true},
                 function(){}
             );
-            console.log(c);
-
             res.status(200).json(r);
         }
     });
@@ -74,18 +72,19 @@ exports.create = function(req, res, next) {
  *  # result : 함수 실행 결과 (1 : 에러 / 0 : 정상)
  *  # user : 조회한 사용자 정보 (UserSchema)
  */
-exports.read = function(req, res, next) {
+exports.search = function(req, res, next) {
     var r = new Object();
 
-    Solution.findById(req.params._id, function(err, user) {
+    Solution.find({solutionType:req.params._type}, function(err, solutions) {
         if(err) {
             r["result"] = 1;
             res.status(400).json(r);
             return next(err);
         } else {
-            if(user != null) {
+            if(solutions != null) {
+
                 r["result"] = 0;
-                r["user"] = user;
+                r["solutions"] = solutions;
                 res.status(200).json(r);
             } else {
                 r["result"] = 1;
@@ -94,87 +93,20 @@ exports.read = function(req, res, next) {
         }
     });
 };
-
-/**
- * [update / 사용자 정보 수정 함수]
- * [Description]
- * 데이터베이스에 저장된 사용자 계정 정보를 수정한다.
- *
- * 1. 수정에 성공할 경우
- * HTTP Status Code : 200
- * JSON 변수 r { result : 0, user : UserSchema }
- *
- * 2. 수정에 실패할 경우
- * HTTP Status Code : 400
- * JSON 변수 r { result : 1 }
- *
- *
- * < Param >
- * @param {Object} r [어플리케이션으로 반환할 JSON 변수]
- *
- * < Return >
- * @return {JSON} Object 변수인 r을 반환
- *  # result : 함수 실행 결과 (1 : 에러 / 0 : 정상)
- *  # user : 수정한 사용자 정보 (UserSchema)
- */
-exports.update = function(req, res, next) {
-    var u = new User(req.body);
+exports.readAll = function(req, res, next) {
     var r = new Object();
 
-    Solution.findByIdAndUpdate(u._id, u, function(err, user) {
+    Solution.find({}, function(err, solutions) {
         if(err) {
             r["result"] = 1;
             res.status(400).json(r);
             return next(err);
         } else {
-            if(user != null) {
-                r["result"] = 0;
-                r["user"] = u;
-                res.status(200).json(r);
+            if(solutions != null) {
+                res.status(200).json(solutions);
             } else {
-                r["result"] = 1;
                 res.status(404).json(r);
             }
         }
     });
 };
-
-/**
- * [delete / 사용자 정보 삭제 함수]
- * [Description]
- * 데이터베이스에 저장된 사용자 계정 정보를 삭제한다.
- *
- * 1. 삭제에 성공할 경우
- * HTTP Status Code : 200
- * JSON 변수 r { result : 0 }
- *
- * 2. 삭제에 실패할 경우
- * HTTP Status Code : 400
- * JSON 변수 r { result : 1 }
- *
- *
- * < Param >
- * @param {Object} r [어플리케이션으로 반환할 JSON 변수]
- *
- * < Return >
- * @return {JSON} Object 변수인 r을 반환
- *  # result : 함수 실행 결과 (1 : 에러 / 0 : 정상)
- */
-exports.delete = function(req, res, next) {
-    var r = new Object();
-
-    User.findByIdAndRemove(req.params._id, function(err) {
-        if(err) {
-            r["result"] = 1;
-            res.status(400).json(r);
-            return next(err);
-        } else {
-            r["result"] = 0;
-            res.status(200).json(r);
-        }
-    });
-};
-
-/**
- * 	Other User Function
- */

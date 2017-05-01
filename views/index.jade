@@ -2,30 +2,30 @@ extends layout
 
 block content
   h1= title
-
-
-  form(action='/solution', method='post')
-
-      span.label 분야
-      select(name = solutionType)
-        each type, i in types
-          option(value = i+1) #{type}
-      div.input
-        span.label 제목
-        input(type="text", name="title")
-      div.input
-        span.label 내용
-        textarea(name="content", cols="40", rows="5")
-      div.input
-        span.label 참조한 곳
-        textarea(name="reference", cols="40")
-      div.input
-        span.label 후보자 명
-        textarea(type =text, name="_creator", cols="40")
-      div.actions
-        input(type="submit", value="add")
-    h5 문재인 = 59065e890d9dbd030ba98277
-    h5 홍준표 = 59065e930d9dbd030ba98278
-    h5 안철수 = 59065e970d9dbd030ba98279
-    h5 유승민 = 59065e9b0d9dbd030ba9827a
-    h5 심상정 = 59065e9e0d9dbd030ba9827b
+  div.container
+      form(action='/solution', method='post')
+          div.input
+            label(for="solutionType") 분야
+            select(name = "solutionType",.form-control)
+                each type, i in types
+                    option(value = i+1) #{type}
+          div.form-group
+            label(for="title") 제목
+            input(type="text", name="title")
+          div.form-group
+            label(for="content") 내용
+            textarea(name="content", cols="40", rows="5")
+          div.form-group
+            label(for="reference") 참조한 곳
+            textarea(name="reference", cols="40")
+          div.form-group
+            label(for="_creator") 후보자 명
+            select(name = "_creator", .form-control)
+                option(value = "59065e890d9dbd030ba98277") 문재인
+                option(value = "59065e930d9dbd030ba98278") 홍준표
+                option(value = "59065e970d9dbd030ba98279") 안철수
+                option(value = "59065e9b0d9dbd030ba9827a") 유승민
+                option(value = "59065e9e0d9dbd030ba9827b") 심상정
+          div.actions
+            input(type="submit", value="추가하기")
+            input(type="reset", value="취소하기")
