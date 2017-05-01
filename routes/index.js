@@ -15,6 +15,7 @@ module.exports = function(app) {
     app.route("/solution/:_type").get(solution.search);//투표자 랜덤 데이터 Via type
     app.route("/solutions").get(solution.readAll);//투표 데이터
     app.route("/solutions/list").get(solution.itemList);//투표 질문
+    app.route("/solutions/:_number").get(solution.listSearch);//투표자 랜덤 데이터 Via type
     /**
      * 	Other User Method Routes
      */
