@@ -118,7 +118,7 @@ exports.listSearch = function(req, res, next) {
         '시간당 최저임금에 대해서 어떻게 생각하시나요?',
         '청년 고용을 늘리는 일자리 창출을 위해 "작은 정부"기조를 유지하며 민간영역을 활성화하는 것에 대해서 어떻게 생각하십니까?'
     ];
-    var query = [{ $match: {title : list[req.params._number]}}, { $sample: {size: 5}}];
+    var query = [{ $match: {title : list[req.params._number]}}];
 
     Solution.aggregate(query,
         function(err,solutions) {

@@ -1,4 +1,5 @@
 var Candidate = require("mongoose").model("Candidate");
+var ipaddr = require("ipaddr.js");
 
 /**
  * 	User CRUD Function
@@ -108,25 +109,44 @@ exports.read = function(req, res, next) {
  *  # user : 수정한 사용자 정보 (UserSchema)
  */
 exports.update = function(req, res, next) {
-    var u = new User(req.body);
     var r = new Object();
+    var ipString = req.connection.remoteAddress;
+    if (ipaddr.IPv4.isValid(ipString)) {
+        ipString = ipString;
+    } else if (ipaddr.IPv6.isValid(ipString)) {
+        var ip = ipaddr.IPv6.parse(ipString);
+        if (ip.isIPv4MappedAddress()) {
+            ipString = ip.toIPv4Address().toString();
 
-    User.findByIdAndUpdate(u._id, u, function(err, user) {
-        if(err) {
-            r["result"] = 1;
-            res.status(400).json(r);
-            return next(err);
         } else {
-            if(user != null) {
-                r["result"] = 0;
-                r["user"] = u;
-                res.status(200).json(r);
-            } else {
-                r["result"] = 1;
-                res.status(404).json(r);
-            }
+            // ipString is IPv6
         }
-    });
+    } else {
+        // ipString is invalid
+    }
+    if(ipString == '127.0.0.1'){
+        Candidate.findByIdAndUpdate({_id:ObjectId(req.params._id)}, function(err, result) {
+            if(err) {
+                r["result"] = 1;
+                res.status(400).json(r);
+                return next(err);
+            } else {
+                if(result != null) {
+                    r["result"] = 0;
+                    res.status(200).json(r);
+                } else {
+                    r["result"] = 1;
+                    res.status(404).json(r);
+                }
+            }
+        });
+    }
+    else{
+        r["result"] = 1;
+        res.status(400).json(r);
+    }
+
+
 };
 exports.readAll = function(req, res, next) {
     var r = new Object();
