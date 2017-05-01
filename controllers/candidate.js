@@ -146,6 +146,8 @@ exports.readAll = function(req, res, next) {
         }
     });
 };
+
+
 /*
 Candidate.findByIdAndUpdate(
 
