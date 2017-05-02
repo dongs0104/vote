@@ -1,6 +1,6 @@
 var Candidate = require("mongoose").model("Candidate");
 var ipaddr = require("ipaddr.js");
-
+var ObjectId = require("mongoose").Types.ObjectId;
 /**
  * 	User CRUD Function
  */
@@ -44,49 +44,6 @@ exports.create = function(req, res, next) {
 };
 
 /**
- * [read / 사용자 정보 조회 함수]
- * [Description]
- * 데이터베이스에 저장된 사용자 계정 정보를 조회한다.
- *
- * 1. 조회에 성공할 경우
- * HTTP Status Code : 200
- * JSON 변수 r { result : 0, user : UserSchema }
- *
- * 2. 조회에 실패할 경우
- * HTTP Status Code : 400
- * JSON 변수 r { result : 1 }
- *
- *
- * < Param >
- * @param {Object} r [어플리케이션으로 반환할 JSON 변수]
- *
- * < Return >
- * @return {JSON} Object 변수인 r을 반환
- *  # result : 함수 실행 결과 (1 : 에러 / 0 : 정상)
- *  # user : 조회한 사용자 정보 (UserSchema)
- */
-exports.read = function(req, res, next) {
-    var r = new Object();
-
-    User.findById(req.params._id, function(err, user) {
-        if(err) {
-            r["result"] = 1;
-            res.status(400).json(r);
-            return next(err);
-        } else {
-            if(user != null) {
-                r["result"] = 0;
-                r["user"] = user;
-                res.status(200).json(r);
-            } else {
-                r["result"] = 1;
-                res.status(404).json(r);
-            }
-        }
-    });
-};
-
-/**
  * [update / 사용자 정보 수정 함수]
  * [Description]
  * 데이터베이스에 저장된 사용자 계정 정보를 수정한다.
@@ -124,8 +81,10 @@ exports.update = function(req, res, next) {
     } else {
         // ipString is invalid
     }
+
     if(ipString == '127.0.0.1'){
-        Candidate.findByIdAndUpdate({_id:ObjectId(req.params._id)}, function(err, result) {
+        console.log(req.params._id);
+        Candidate.findByIdAndUpdate({_id:req.params._id},{$inc:{voted:1}} , function(err, result) {
             if(err) {
                 r["result"] = 1;
                 res.status(400).json(r);

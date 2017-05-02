@@ -8,7 +8,7 @@ module.exports = function(app) {
      *  User CRUD Routes
      */
     app.route("/candidate").post(candidate.create);//임시
-    app.route("/candidate/update/:id").put(candidate.update);//후보자 투표율 증가
+    app.route("/candidate/update/:_id").get(candidate.update);//후보자 투표율 증가
     app.route("/candidates").get(candidate.readAll);//후보자 투표율 증가
 
     app.route("/solution").post(solution.create);//임시 투표 검증 데이터
@@ -19,5 +19,5 @@ module.exports = function(app) {
     /**
      * 	Other User Method Routes
      */
-    app.route("/solution").delete(solution.delete);//투표 데이터
+    //app.route("/solution").delete(solution.delete);//투표 데이터
 };
