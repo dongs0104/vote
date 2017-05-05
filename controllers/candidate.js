@@ -67,23 +67,7 @@ exports.create = function(req, res, next) {
  */
 exports.update = function(req, res, next) {
     var r = new Object();
-    var ipString = req.connection.remoteAddress;
-    if (ipaddr.IPv4.isValid(ipString)) {
-        ipString = ipString;
-    } else if (ipaddr.IPv6.isValid(ipString)) {
-        var ip = ipaddr.IPv6.parse(ipString);
-        if (ip.isIPv4MappedAddress()) {
-            ipString = ip.toIPv4Address().toString();
-
-        } else {
-            // ipString is IPv6
-        }
-    } else {
-        // ipString is invalid
-    }
-
-    if(ipString == '127.0.0.1'){
-        console.log(req.params._id);
+    if(req.headers.origin === 'http://pick2017.me'){
         Candidate.findByIdAndUpdate({_id:req.params._id},{$inc:{voted:1}} , function(err, result) {
             if(err) {
                 r["result"] = 1;
@@ -104,8 +88,6 @@ exports.update = function(req, res, next) {
         r["result"] = 1;
         res.status(400).json(r);
     }
-
-
 };
 exports.readAll = function(req, res, next) {
     var r = new Object();
